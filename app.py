@@ -36,6 +36,3 @@ def predict():
         prediction = model.predict(input_data)[0]  # 0 or 1
 
     return render_template('home.html', prediction=prediction)
-    
-if __name__ == '__main__':
-    app.run(debug=True)
