@@ -1,0 +1,2 @@
+# DiabetesPredictor-Enhancing-Early-Detection-of-Diabetes
+DiabetesPredictor is a machine learning-powered web application designed to assist users in early detection of diabetes based on personal health parameters. By analyzing key medical indicators such as glucose level, BMI, insulin, and age, it provides instant predictions and practical health recommendations, promoting proactive health management.
