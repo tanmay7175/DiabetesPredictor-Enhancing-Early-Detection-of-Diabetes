@@ -1,68 +1,105 @@
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', Arial, sans-serif;
     background-color: #fff9ef;
 }
 
 .navbar {
     background-color: #ff7f4d;
-    padding: 1rem 0;
+    padding: 1rem;
     text-align: center;
+}
+
+.navbar .logo {
+    font-size: 1.8rem;
+    color: white;
+    font-weight: bold;
+    margin: 0;
 }
 
 .nav-links {
     list-style: none;
     padding: 0;
+    margin: 0.5rem 0 0;
 }
 
 .nav-links li {
     display: inline;
-    margin: 0 15px;
+    margin: 0 1rem;
 }
 
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: bold;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
-.navbar .logo {
-    font-size: 2rem;
-    color: white;
-    font-weight: bold;
+.nav-links a:hover {
+    text-decoration: underline;
 }
 
 .form-container {
-    background: white;
-    width: 400px;
+    background: rgb(255, 254, 254);
+    max-width: 90%;
+    width: 300px;
     margin: 2rem auto;
     padding: 2rem;
-    border-radius: 10px;
+    border-radius: 20px;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
 .form-container h2 {
     color: #ff7f4d;
     text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.form-container p {
+    text-align: center;
+    color: #555;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 0.3rem;
 }
 
 input[type="number"] {
-    width: 100%;
-    padding: 10px;
-    margin: 0.5rem 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+    width: 200%;
+    padding: 0.8rem;
+    margin: 0;
+    border-radius: 40px;
+    border: 10px solid #ccc;
+    box-sizing: border-box;
 }
 
-button {
+.predict-button {
     background-color: #ff7f4d;
     color: white;
-    padding: 10px 15px;
+    padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
-    margin-top: 1rem;
+    width: 100%;
     cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.predict-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.predict-button:hover:not(:disabled) {
+    background-color: #e66b3c;
 }
 
 .result {
@@ -84,7 +121,28 @@ button {
     color: #2e8b57;
 }
 
+.error {
+    margin-top: 1rem;
+    color: #cc0000;
+    font-size: 0.9rem;
+}
+
 ul {
     padding-left: 1.2rem;
     margin-top: 0.5rem;
+}
+
+@media (max-width: 500px) {
+    .form-container {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .navbar .logo {
+        font-size: 1.5rem;
+    }
+
+    .nav-links li {
+        margin: 0 0.5rem;
+    }
 }

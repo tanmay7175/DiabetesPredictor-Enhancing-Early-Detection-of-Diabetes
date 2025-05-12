@@ -3,13 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DiabetesGuard - Smart Diabetes Detection</title>
+    <title>DiabetesPredictor-Enhancing-Early-Detection-of-Diabetes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        // Disable submit button during prediction to prevent multiple submissions
+        function onSubmit() {
+            document.getElementById("predict-button").disabled = true;
+            document.getElementById("predict-button").innerText = "Predicting...";
+        }
+    </script>
 </head>
 <body>
     <nav>
         <div class="navbar">
-            <h1 class="logo">DiabetesPredictor: Enhancing Early Detection of Diabetes</h1>
+            <h1 class="logo">DiabetesPredictor-Enhancing Early Detection of Diabetes</h1>
             <ul class="nav-links">
             </ul>
         </div>
@@ -17,25 +24,65 @@
 
     <div class="form-container">
         <h2>Smart Diabetes Detection</h2>
-        <p>Enter your medical details to find out your diabetes risk and receive helpful health suggestions.</p>
+        <p>Enter your medical details to assess your diabetes risk and receive health suggestions.</p>
 
-        <form method="POST">
-            <input type="number" name="Pregnancies" placeholder="Pregnancies" step="any" required>
-            <input type="number" name="Glucose" placeholder="Glucose" step="any" required>
-            <input type="number" name="BloodPressure" placeholder="Blood Pressure" step="any" required>
-            <input type="number" name="SkinThickness" placeholder="Skin Thickness" step="any" required>
-            <input type="number" name="Insulin" placeholder="Insulin" step="any" required>
-            <input type="number" name="BMI" placeholder="BMI" step="any" required>
-            <input type="number" name="DiabetesPedigreeFunction" placeholder="Diabetes Pedigree Function" step="any" required>
-            <input type="number" name="Age" placeholder="Age" step="any" required>
-            <button type="submit">Predict</button>
+        <form method="POST" onsubmit="onSubmit()">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="pregnancies">{{ form.pregnancies.label }}</label>
+                {{ form.pregnancies(placeholder="e.g., 2", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="glucose">{{ form.glucose.label }}</label>
+                {{ form.glucose(placeholder="e.g., 120", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="blood_pressure">{{ form.blood_pressure.label }}</label>
+                {{ form.blood_pressure(placeholder="e.g., 80", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="skin_thickness">{{ form.skin_thickness.label }}</label>
+                {{ form.skin_thickness(placeholder="e.g., 20", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="insulin">{{ form.insulin.label }}</label>
+                {{ form.insulin(placeholder="e.g., 100", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="bmi">{{ form.bmi.label }}</label>
+                {{ form.bmi(placeholder="e.g., 25.5", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="diabetes_pedigree">{{ form.diabetes_pedigree.label }}</label>
+                {{ form.diabetes_pedigree(placeholder="e.g., 0.5", required=True, min="0", step="any") }}
+            </div>
+            <div class="form-group">
+                <label for="age">{{ form.age.label }}</label>
+                {{ form.age(placeholder="e.g., 30", required=True, min="0", step="any") }}
+            </div>
+            {{ form.submit(id="predict-button", class="predict-button") }}
+
+            {% if form.errors %}
+                <div class="error">
+                    <ul>
+                        {% for field, errors in form.errors.items() %}
+                            {% for error in errors %}
+                                <li>{{ field }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if error %}
+                <div class="error">{{ error }}</div>
+            {% endif %}
         </form>
 
         {% if prediction is not none %}
-            {% if prediction == 1 %}
-                <div class="result result-danger">
-                    <h3>Diabetes Detected</h3>
-                    <p>🩺 We recommend the following home remedies:</p>
+            <div class="result {{ 'result-danger' if prediction == 1 else 'result-safe' }}">
+                <h3>{{ "Diabetes Risk Detected" if prediction == 1 else "No Diabetes Risk Detected" }}</h3>
+                {% if prediction == 1 %}
+                    <p>🩺 We recommend consulting a healthcare professional and trying these home remedies:</p>
                     <ul>
                         <li>Drink bitter gourd juice regularly.</li>
                         <li>Incorporate fenugreek seeds in your diet.</li>
@@ -43,13 +90,10 @@
                         <li>Monitor glucose levels frequently.</li>
                         <li>Eat more fiber-rich and low-carb foods.</li>
                     </ul>
-                </div>
-            {% else %}
-                <div class="result result-safe">
-                    <h3>You’re Safe!</h3>
-                    <p>No signs of diabetes detected. Maintain a healthy lifestyle!</p>
-                </div>
-            {% endif %}
+                {% else %}
+                    <p>Continue maintaining a healthy lifestyle!</p>
+                {% endif %}
+            </div>
         {% endif %}
     </div>
 </body>
