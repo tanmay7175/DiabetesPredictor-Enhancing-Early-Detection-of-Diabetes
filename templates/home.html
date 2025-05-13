@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DiabetesPredictor-Enhancing-Early-Detection-of-Diabetes</title>
+    <title>DiabetesPredictor - Early Detection of Diabetes</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
         // Disable submit button during prediction to prevent multiple submissions
         function onSubmit() {
-            document.getElementById("predict-button").disabled = true;
-            document.getElementById("predict-button").innerText = "Predicting...";
+            const button = document.getElementById("predict-button");
+            button.disabled = true;
+            button.innerText = "Predicting...";
         }
     </script>
 </head>
 <body>
     <nav>
         <div class="navbar">
-            <h1 class="logo">DiabetesPredictor-Enhancing Early Detection of Diabetes</h1>
-            <ul class="nav-links">
-            </ul>
+            <h1 class="logo">DiabetesPredictor - Early Detection of Diabetes</h1>
         </div>
     </nav>
 
@@ -28,70 +27,86 @@
 
         <form method="POST" onsubmit="onSubmit()">
             {{ form.hidden_tag() }}
+
             <div class="form-group">
                 <label for="pregnancies">{{ form.pregnancies.label }}</label>
-                {{ form.pregnancies(placeholder="e.g., 2", required=True, min="0", step="any") }}
+                {{ form.pregnancies(class_="input-field", placeholder="e.g., 2", min="0", step="1", required=True) }}
             </div>
+
             <div class="form-group">
                 <label for="glucose">{{ form.glucose.label }}</label>
-                {{ form.glucose(placeholder="e.g., 120", required=True, min="0", step="any") }}
+                {{ form.glucose(class_="input-field", placeholder="e.g., 120", min="0", step="0.1", required=True) }}
             </div>
+
             <div class="form-group">
                 <label for="blood_pressure">{{ form.blood_pressure.label }}</label>
-                {{ form.blood_pressure(placeholder="e.g., 80", required=True, min="0", step="any") }}
+                {{ form.blood_pressure(class_="input-field", placeholder="e.g., 80", min="0", step="0.1", required=True) }}
             </div>
+
             <div class="form-group">
                 <label for="skin_thickness">{{ form.skin_thickness.label }}</label>
-                {{ form.skin_thickness(placeholder="e.g., 20", required=True, min="0", step="any") }}
+                {{ form.skin_thickness(class_="input-field", placeholder="e.g., 20", min="0", step="0.1", required=True) }}
             </div>
+
             <div class="form-group">
                 <label for="insulin">{{ form.insulin.label }}</label>
-                {{ form.insulin(placeholder="e.g., 100", required=True, min="0", step="any") }}
+                {{ form.insulin(class_="input-field", placeholder="e.g., 100", min="0", step="0.1", required=True) }}
             </div>
+
             <div class="form-group">
                 <label for="bmi">{{ form.bmi.label }}</label>
-                {{ form.bmi(placeholder="e.g., 25.5", required=True, min="0", step="any") }}
+                {{ form.bmi(class_="input-field", placeholder="e.g., 25.5", min="0", step="0.1", required=True) }}
             </div>
+
             <div class="form-group">
-                <label for="diabetes_pedigree">{{ form.diabetes_pedigree.label }}</label>
-                {{ form.diabetes_pedigree(placeholder="e.g., 0.5", required=True, min="0", step="any") }}
+                <label for="diabetes_pedigree">{{ form.diabetes_pedigree.label }} (Optional)</label>
+                {{ form.diabetes_pedigree(class_="input-field", placeholder="e.g., 0.5", min="0", step="0.01") }}
             </div>
+
             <div class="form-group">
                 <label for="age">{{ form.age.label }}</label>
-                {{ form.age(placeholder="e.g., 30", required=True, min="0", step="any") }}
+                {{ form.age(class_="input-field", placeholder="e.g., 30", min="0", step="1", required=True) }}
             </div>
-            {{ form.submit(id="predict-button", class="predict-button") }}
 
+            <div class="form-group">
+                {{ form.submit(id="predict-button", class_="predict-button") }}
+            </div>
+
+            <!-- Display Form Errors -->
             {% if form.errors %}
                 <div class="error">
                     <ul>
                         {% for field, errors in form.errors.items() %}
                             {% for error in errors %}
-                                <li>{{ field }}: {{ error }}</li>
+                                <li><strong>{{ field }}:</strong> {{ error }}</li>
                             {% endfor %}
                         {% endfor %}
                     </ul>
                 </div>
             {% endif %}
+
+            <!-- Display Other Errors -->
             {% if error %}
                 <div class="error">{{ error }}</div>
             {% endif %}
         </form>
 
+        <!-- Display Prediction Result -->
         {% if prediction is not none %}
             <div class="result {{ 'result-danger' if prediction == 1 else 'result-safe' }}">
                 <h3>{{ "Diabetes Risk Detected" if prediction == 1 else "No Diabetes Risk Detected" }}</h3>
+
                 {% if prediction == 1 %}
-                    <p>🩺 We recommend consulting a healthcare professional and trying these home remedies:</p>
+                    <p>🩺 We recommend consulting a healthcare professional. Meanwhile, consider the following tips:</p>
                     <ul>
-                        <li>Drink bitter gourd juice regularly.</li>
-                        <li>Incorporate fenugreek seeds in your diet.</li>
-                        <li>Exercise daily and maintain a healthy weight.</li>
-                        <li>Monitor glucose levels frequently.</li>
-                        <li>Eat more fiber-rich and low-carb foods.</li>
+                        <li>Incorporate fenugreek seeds into your diet.</li>
+                        <li>Engage in regular physical activity.</li>
+                        <li>Monitor blood sugar levels frequently.</li>
+                        <li>Maintain a balanced, fiber-rich diet.</li>
+                        <li>Consult a doctor for further evaluation.</li>
                     </ul>
                 {% else %}
-                    <p>Continue maintaining a healthy lifestyle!</p>
+                    <p>Great job! Keep up with a healthy lifestyle to maintain good health.</p>
                 {% endif %}
             </div>
         {% endif %}

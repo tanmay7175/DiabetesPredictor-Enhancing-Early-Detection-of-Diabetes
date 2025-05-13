@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 from flask_wtf import FlaskForm
-from wtforms import FloatField, SubmitField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms import DecimalField, IntegerField, SubmitField
+from wtforms.validators import InputRequired, NumberRange
 import pandas as pd
 import joblib
 import os
@@ -11,14 +11,14 @@ app.config['SECRET_KEY'] = 'your-secret-key'  # Replace with a secure key for pr
 
 # Define form class with validation for diabetes prediction inputs
 class DiabetesForm(FlaskForm):
-    pregnancies = FloatField('Pregnancies', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    glucose = FloatField('Glucose', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    blood_pressure = FloatField('Blood Pressure', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    skin_thickness = FloatField('Skin Thickness', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    insulin = FloatField('Insulin', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    bmi = FloatField('BMI', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    diabetes_pedigree = FloatField('Diabetes Pedigree Function', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
-    age = FloatField('Age', validators=[DataRequired(), NumberRange(min=0, message="Must be non-negative")])
+    pregnancies = IntegerField('Pregnancies', validators=[InputRequired(), NumberRange(min=0)])
+    glucose = DecimalField('Glucose', validators=[InputRequired(), NumberRange(min=0)])
+    blood_pressure = DecimalField('Blood Pressure', validators=[InputRequired(), NumberRange(min=0)])
+    skin_thickness = DecimalField('Skin Thickness', validators=[InputRequired(), NumberRange(min=0)])
+    insulin = DecimalField('Insulin', validators=[InputRequired(), NumberRange(min=0)])
+    bmi = DecimalField('BMI', validators=[InputRequired(), NumberRange(min=0)])
+    diabetes_pedigree = DecimalField('Diabetes Pedigree Function', validators=[InputRequired(), NumberRange(min=0)])
+    age = IntegerField('Age', validators=[InputRequired(), NumberRange(min=0)])
     submit = SubmitField('Predict')
 
 # Load the trained model with error handling
@@ -38,10 +38,8 @@ def home():
     form = DiabetesForm()
     prediction = None
     error = None
-    loading = False
 
     if form.validate_on_submit():
-        loading = True  # Indicate prediction is in progress
         if model:
             try:
                 # Extract form data into a list for prediction
@@ -70,7 +68,7 @@ def home():
         else:
             error = "Model not loaded. Please ensure model.pkl exists and is valid."
 
-    return render_template('home.html', form=form, prediction=prediction, error=error, loading=loading)
+    return render_template('home.html', form=form, prediction=prediction, error=error)
 
 if __name__ == "__main__":
-    app.run(debug=False)  # Debug=False for production readiness
+    app.run(debug=False)
